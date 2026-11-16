@@ -2,6 +2,7 @@
   "schema": 1,
   "capabilities": [
     "endfield",
+    "screen-args",
     "touch-ui-switch"
   ]
 }

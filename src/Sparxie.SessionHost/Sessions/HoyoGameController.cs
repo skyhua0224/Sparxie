@@ -21,6 +21,7 @@ public sealed class HoyoGameController : IGameController
     private string? _launchPath;
     private string _launchArguments = string.Empty;
     private string _gameType = "genshin";
+    private ScreenArgs? _screen;
     private bool _disposed;
 
     public async Task PrepareLaunchAsync(ProfileSnapshot profile, CancellationToken cancellationToken)
@@ -29,6 +30,7 @@ public sealed class HoyoGameController : IGameController
         _launchPath = profile.ExecutablePath;
         _launchArguments = LaunchArguments.Build(profile.Launch.ToModel());
         _gameType = profile.Game;
+        _screen = profile.Screen;
         await Task.CompletedTask.ConfigureAwait(false);
     }
 
@@ -49,7 +51,7 @@ public sealed class HoyoGameController : IGameController
 
     public async Task InstallAsync(Process? gameProcess, IntPtr jobHandle, HoyoProfileSettings? hoyo, CancellationToken cancellationToken)
     {
-        var request = BuildRequest(_gameType, _launchPath, hoyo, _launchArguments);
+        var request = BuildRequest(_gameType, _launchPath, hoyo, _screen, _launchArguments);
         var result = new HoyoResult { Size = (uint)Marshal.SizeOf<HoyoResult>() };
 
         try
@@ -163,13 +165,16 @@ public sealed class HoyoGameController : IGameController
         }
     }
 
-    /// <summary>Profile 设置 → native 启动请求。GameExecutablePath 与 GameArguments（非零时）由调用方负责 FreeHGlobal。</summary>
-    internal static HoyoLaunchRequest BuildRequest(string gameType, string? launchPath, HoyoProfileSettings? hoyo, string? launchArguments = null)
+    /// <summary>
+    /// Profile 设置 → native 启动请求。GameExecutablePath 与 GameArguments（非零时）由调用方负责 FreeHGlobal。
+    /// 没有用户自己的启动参数时，Unity 屏幕参数经 GameArguments 交给 bootstrap，由它拼成 CreateProcess 的命令行。
+    /// </summary>
+    internal static HoyoLaunchRequest BuildRequest(string gameType, string? launchPath, HoyoProfileSettings? hoyo, ScreenArgs? screen = null, string? launchArguments = null)
     {
         var settings = hoyo ?? new HoyoProfileSettings { FpsUnlockEnabled = true, TargetFps = 120, ProcessPriority = ProcessPriority.Normal };
         // Hoyo 由 Runtime 创建进程：路径来自启动请求（bootstrap 内部 CreateProcess）
         var path = launchPath ?? string.Empty;
-        var arguments = launchArguments ?? string.Empty;
+        var arguments = string.IsNullOrEmpty(launchArguments) ? ScreenArguments.Build(screen) : launchArguments;
 
         return new HoyoLaunchRequest
         {

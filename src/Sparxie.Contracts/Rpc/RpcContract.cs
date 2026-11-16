@@ -9,6 +9,9 @@ public static class RpcContract
     /// <summary>Broker 认识 game = "endfield" 会话（终末地 Runtime 会话控制）。</summary>
     public const string CapabilityEndfield = "endfield";
 
+    /// <summary>Broker 认识 ProfileSnapshot.screen：会话的宽高与窗口模式会变成游戏的 Unity 命令行参数。</summary>
+    public const string CapabilityScreenArgs = "screen-args";
+
     /// <summary>Broker 认识 HoyoSettings.touch_ui_enabled：可以启动不带触屏界面的会话；旧 Broker 会忽略该字段并照常启动触屏界面。</summary>
     public const string CapabilityTouchUiSwitch = "touch-ui-switch";
 
@@ -16,6 +19,7 @@ public static class RpcContract
     public static IReadOnlyList<string> Capabilities { get; } =
     [
         CapabilityEndfield,
+        CapabilityScreenArgs,
         CapabilityTouchUiSwitch,
     ];
 }
