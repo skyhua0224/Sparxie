@@ -39,6 +39,7 @@ public static class ProfileSnapshotMapper
                 ? null
                 : new HoyoSettings
                 {
+                    TouchUiEnabled = profile.Hoyo.TouchUiEnabled,
                     FpsUnlockEnabled = profile.Hoyo.FpsUnlockEnabled,
                     TargetFps = profile.Hoyo.TargetFps,
                     BackgroundFpsLimitEnabled = profile.Hoyo.BackgroundFpsLimitEnabled,

@@ -22,6 +22,7 @@ public sealed record ProfileMutation(
     int? GenshinPreset60Fps = null,
     bool? GenshinTouchUiScaleOverrideEnabled = null,
     int? GenshinTouchUiScalePercent = null,
+    bool? TouchUiEnabled = null,
     string? EndfieldInputMode = null,
     bool? EndfieldAutoResolution = null,
     int? EndfieldWidth = null,
@@ -39,7 +40,8 @@ public sealed record ProfileMutation(
         || TargetFps.HasValue
         || BackgroundFpsLimitEnabled.HasValue
         || BackgroundFps.HasValue
-        || ProcessPriority.HasValue;
+        || ProcessPriority.HasValue
+        || TouchUiEnabled.HasValue;
 
     public bool HasEndfieldSettings =>
         EndfieldInputMode is not null

@@ -1,6 +1,7 @@
 {
   "schema": 1,
   "capabilities": [
-    "endfield"
+    "endfield",
+    "touch-ui-switch"
   ]
 }

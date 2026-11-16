@@ -29,6 +29,7 @@ message HoyoSettings {
   int32 genshin_preset_60_fps = 8;
   bool genshin_touch_ui_scale_override_enabled = 9;
   int32 genshin_touch_ui_scale_percent = 10;
+  optional bool touch_ui_enabled = 11;
   string endfield_input_mode = 12;
   bool endfield_auto_resolution = 13;
   int32 endfield_width = 14;
